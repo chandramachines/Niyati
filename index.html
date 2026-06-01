@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self';" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Niyati Browser</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="titlebar" role="banner">
+      <div class="left-pack">
+        <div id="netStatus" class="chip netchip offline" role="status" aria-live="polite">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="label">Offline</span>
+        </div>
+        <form id="refreshForm" class="chip refresh-controls" autocomplete="off">
+          <button id="refreshStart" type="submit" class="chipbtn">Start</button>
+          <button id="refreshStop" type="button" class="chipbtn alt">Stop</button>
+        </form>
+      </div>
+
+      <div class="window-title theme-trigger" id="titleThemeTrigger" role="button" aria-label="Click to change theme" aria-expanded="false">
+        <svg class="app-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        <span>Niyati Browser</span>
+        <!-- Theme Panel -->
+        <div id="themePanel" class="theme-panel" role="dialog" aria-label="Theme options">
+          <div class="theme-panel-header">Background Color</div>
+          <div class="theme-colors">
+            <button class="color-btn" data-bg="#0b0c0e" title="Default Dark" aria-label="Default Dark"></button>
+            <button class="color-btn" data-bg="#0f172a" title="Slate" aria-label="Slate"></button>
+            <button class="color-btn" data-bg="#1e1b4b" title="Indigo" aria-label="Indigo"></button>
+            <button class="color-btn" data-bg="#172554" title="Blue" aria-label="Blue"></button>
+            <button class="color-btn" data-bg="#083344" title="Cyan" aria-label="Cyan"></button>
+            <button class="color-btn" data-bg="#022c22" title="Emerald" aria-label="Emerald"></button>
+            <button class="color-btn" data-bg="#14532d" title="Green" aria-label="Green"></button>
+            <button class="color-btn" data-bg="#422006" title="Amber" aria-label="Amber"></button>
+            <button class="color-btn" data-bg="#450a0a" title="Red" aria-label="Red"></button>
+            <button class="color-btn" data-bg="#4a044e" title="Fuchsia" aria-label="Fuchsia"></button>
+            <button class="color-btn" data-bg="#3b0764" title="Purple" aria-label="Purple"></button>
+            <button class="color-btn" data-bg="#1c1917" title="Stone" aria-label="Stone"></button>
+          </div>
+          <div class="theme-panel-header">Custom Color</div>
+          <div class="custom-color-row">
+            <input type="color" id="customColorPicker" value="#0b0c0e" />
+            <button id="applyCustomColor" class="chipbtn" type="button">Apply</button>
+          </div>
+        </div>
+      </div>
+      <div class="drag-region" aria-hidden="true"></div>
+
+      <div class="window-controls" role="group" aria-label="Window controls">
+        <button id="min" class="winbtn" aria-label="Minimize">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="5" y="11" width="14" height="2" rx="1"></rect></svg>
+        </button>
+        <button id="max" class="winbtn" aria-label="Maximize" data-state="restored">
+          <svg id="maxIcon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <rect x="6.5" y="6.5" width="11" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"></rect>
+          </svg>
+        </button>
+        <button id="close" class="winbtn danger" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="content" role="main">
+      <section class="layout">
+        <div class="stack-col">
+          <div class="card" id="productsCard">
+            <header class="card-head">
+              <h2>Products</h2>
+              <form id="prodForm" class="head-actions" autocomplete="off">
+                <input id="prodInput" type="text" placeholder="Add products..." />
+                <button id="prodAdd" type="submit" class="btn primary">Add</button>
+                <span id="prodCount" class="badge">0</span>
+              </form>
+            </header>
+            <section>
+              <div class="scroll-area">
+                <ul id="prodList" class="pillList" aria-live="polite"></ul>
+              </div>
+            </section>
+          </div>
+
+          <div class="card" id="keywordsCard">
+            <header class="card-head">
+              <h2>Keywords</h2>
+              <form id="keyForm" class="head-actions" autocomplete="off">
+                <input id="keyInput" type="text" placeholder="Add keywords..." />
+                <button id="keyAdd" type="submit" class="btn primary">Add</button>
+                <span id="keyCount" class="badge">0</span>
+              </form>
+            </header>
+            <section>
+              <div class="scroll-area">
+                <div id="keyInline" class="inline-list" aria-live="polite"></div>
+              </div>
+            </section>
+          </div>
+
+          <div class="card" id="skipLocationCard">
+            <header class="card-head">
+              <h2>Skip Location</h2>
+              <form id="skipLocForm" class="head-actions" autocomplete="off">
+                <input id="skipLocInput" type="text" placeholder="Add locations..." />
+                <button id="skipLocAdd" type="submit" class="btn primary">Add</button>
+                <span id="skipLocCount" class="badge">0</span>
+              </form>
+            </header>
+            <section>
+              <div class="scroll-area">
+                <div id="skipLocInline" class="inline-list" aria-live="polite"></div>
+              </div>
+            </section>
+          </div>
+
+          <div class="card" id="skipNameCard">
+            <header class="card-head">
+              <h2>Skip Name</h2>
+              <form id="skipNameForm" class="head-actions" autocomplete="off">
+                <input id="skipNameInput" type="text" placeholder="Add product names..." />
+                <button id="skipNameAdd" type="submit" class="btn primary">Add</button>
+                <span id="skipNameCount" class="badge">0</span>
+              </form>
+            </header>
+            <section>
+              <div class="scroll-area">
+                <div id="skipNameInline" class="inline-list" aria-live="polite"></div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <aside class="logpanel">
+          <header class="loghead">
+            <span>Logs</span>
+            <span id="logCount" class="badge">0</span>
+          </header>
+          <ul id="logList" class="loglist" aria-live="polite" aria-relevant="additions"></ul>
+        </aside>
+      </section>
+    </main>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>
